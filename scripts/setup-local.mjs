@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // `pnpm setup:local`: create `.env` from `.env.example` with fresh random secrets for this
-// machine (Postgres passwords, auth, encryption, supervisor and screen-proxy secrets), and let
-// the host-side dev stack control Docker Desktop computers. An existing `.env` is left alone.
+// machine (Postgres passwords, auth, encryption, supervisor and screen-proxy secrets), and, on
+// Docker Desktop, control computers over loopback. An existing `.env` is left alone.
+import { execFileSync } from "node:child_process";
 import { randomBytes } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -33,8 +34,14 @@ for (const [key, value] of Object.entries(values)) {
 }
 env = env
   .replace("REPLACE_WITH_POSTGRES_APP_PASSWORD", postgresApp)
-  .replace("REPLACE_WITH_POSTGRES_PASSWORD", postgres)
-  .replace(/^# SANDBOX_CONTROL_VIA_LOOPBACK=true$/m, "SANDBOX_CONTROL_VIA_LOOPBACK=true");
+  .replace("REPLACE_WITH_POSTGRES_PASSWORD", postgres);
+// Docker Desktop container IPs are unreachable from the host; native Linux Docker Engine's are.
+if (usesDockerDesktop()) {
+  env = env.replace(
+    /^# SANDBOX_CONTROL_VIA_LOOPBACK=true$/m,
+    "SANDBOX_CONTROL_VIA_LOOPBACK=true",
+  );
+}
 
 if (/replace-with|REPLACE_WITH/.test(env)) {
   console.error("[setup] .env.example has a placeholder this script does not fill; check it");
@@ -42,3 +49,16 @@ if (/replace-with|REPLACE_WITH/.test(env)) {
 }
 writeFileSync(target, env);
 console.log("[setup] Created .env with random secrets for this machine");
+
+function usesDockerDesktop() {
+  try {
+    const os = execFileSync("docker", ["info", "--format", "{{.OperatingSystem}}"], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+    return os.includes("Docker Desktop");
+  } catch {
+    // Docker is not running: macOS and Windows hosts almost always use Docker Desktop.
+    return process.platform !== "linux";
+  }
+}
