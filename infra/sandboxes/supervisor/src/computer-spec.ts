@@ -179,6 +179,12 @@ export function computerResourceLimits() {
   };
 }
 
+/** A host folder shared read-write into every bot computer at /projects, when set. */
+export function computerProjectBinds(): string[] {
+  const dir = process.env.RAKAZO_COMPUTER_PROJECTS_DIR?.trim();
+  return dir ? [`${dir}:/projects`] : [];
+}
+
 export function resolveScreenNetworkMode(value: string | undefined): ScreenNetworkMode {
   if (!value || value === "published") return "published";
   if (value === "internal" || value === "isolated") return value;
@@ -392,6 +398,7 @@ export type SandboxInput =
 
 export function containerCreateOptions(input: ComputerCreateInput) {
   const ports = computerPortBindings(input.publishControlPort);
+  const projectBinds = computerProjectBinds();
   return {
     Image: input.image,
     name: input.name,
@@ -414,7 +421,7 @@ export function containerCreateOptions(input: ComputerCreateInput) {
     HostConfig: {
       ...(input.homeVolume
         ? {
-            Binds: undefined,
+            Binds: projectBinds.length ? projectBinds : undefined,
             Mounts: [
               {
                 Type: "volume" as const,
@@ -428,7 +435,10 @@ export function containerCreateOptions(input: ComputerCreateInput) {
               },
             ],
           }
-        : { Binds: [`${input.homePath}:/home/rakazo`], Mounts: undefined }),
+        : {
+            Binds: [`${input.homePath}:/home/rakazo`, ...projectBinds],
+            Mounts: undefined,
+          }),
       PortBindings: ports.PortBindings,
       ShmSize: 256 * 1024 * 1024,
       CapDrop: ["ALL"],

@@ -19,7 +19,7 @@ import {
   TERMINAL_MENU_COMMAND,
 } from "@rakazo/core/node/desktop-runtime";
 import type Docker from "dockerode";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   assertVolumeSubpathSupport,
   COMPUTER_IMAGE,
@@ -2002,5 +2002,34 @@ describe("computer home storage", () => {
     );
     // Steady state waits on Xvfb instead of polling, so the trap runs immediately.
     expect(start).toMatch(/^wait "\$XVFB_PID"$/m);
+  });
+});
+
+describe("shared projects folder", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  const base = {
+    name: "rakazo-bot-abc",
+    image: COMPUTER_IMAGE,
+    botId: "abc",
+    spaceId: "ws",
+    homePath: "/var/rakazo/homes/abc",
+  };
+
+  it("mounts RAKAZO_COMPUTER_PROJECTS_DIR at /projects next to the home", () => {
+    vi.stubEnv("RAKAZO_COMPUTER_PROJECTS_DIR", "/srv/code");
+    expect(containerCreateOptions(base).HostConfig.Binds).toEqual([
+      "/var/rakazo/homes/abc:/home/rakazo",
+      "/srv/code:/projects",
+    ]);
+  });
+
+  it("adds nothing when the folder is unset or blank", () => {
+    vi.stubEnv("RAKAZO_COMPUTER_PROJECTS_DIR", "  ");
+    expect(containerCreateOptions(base).HostConfig.Binds).toEqual([
+      "/var/rakazo/homes/abc:/home/rakazo",
+    ]);
   });
 });
