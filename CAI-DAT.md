@@ -2,7 +2,7 @@
 
 ## Cần có
 
-- Git và quyền truy cập repo `thekp3/gettimebot`
+- Git
 - Node.js 24 (hoặc 22.22.2+; không dùng 23, 25)
 - pnpm 9 (`corepack enable`)
 - Docker đang chạy
