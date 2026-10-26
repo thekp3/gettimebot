@@ -76,21 +76,18 @@ describe("CreateBotDialog", () => {
     expect(button("Create").disabled).toBe(false);
   });
 
-  it("sends the organic family the preview draws", async () => {
+  it("sends the organic family of the picked shape", async () => {
     const onCreate = vi.fn(async (_input: CreateBotDialogInput) => undefined);
     await render(onCreate);
     await click(button("Shape 2"));
     await click(button("Color #10B981"));
-    const preview = document.querySelector(".rakazo-organic-avatar");
-    const family = Number(preview?.getAttribute("data-shape-family"));
     await typeName("Scout");
     await click(button("Create"));
     expect(onCreate).toHaveBeenCalledWith({
       name: "Scout",
       color: "#10B981",
-      avatarFamily: family,
+      avatarFamily: ORGANIC_AVATAR_LOOKS[1],
     });
-    expect(family).toBe(ORGANIC_AVATAR_LOOKS[1]);
   });
 
   it("sends a studio shape without an organic family", async () => {

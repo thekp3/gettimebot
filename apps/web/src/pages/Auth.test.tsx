@@ -51,6 +51,7 @@ vi.mock("@rakazo/ui-web", () => ({
     />
   ),
   InputOTPGroup: () => null,
+  MascotHead: () => null,
   InputOTPSlot: () => null,
   Label: ({ children, htmlFor, ...props }: React.ComponentProps<"label">) => (
     <label htmlFor={htmlFor} {...props}>

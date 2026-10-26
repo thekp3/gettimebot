@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="512" height="512">
+  <defs>
+    <radialGradient id="shell" cx="0.5" cy="0.47" r="0.6">
+      <stop offset="0.55" stop-color="#9fb2a8" stop-opacity="0"/>
+      <stop offset="0.85" stop-color="#9fb2a8" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#9fb2a8" stop-opacity="0.24"/>
+    </radialGradient>
+    <linearGradient id="ring" gradientUnits="userSpaceOnUse" x1="50.00" y1="12.16" x2="50.00" y2="87.84">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.45" stop-color="#dfe6e2"/>
+      <stop offset="1" stop-color="#a9b8b0"/>
+    </linearGradient>
+    <radialGradient id="spec">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="pool" cx="0.5" cy="1" r="0.6">
+      <stop offset="0" stop-color="#9fb2a8" stop-opacity="0.42"/>
+      <stop offset="0.55" stop-color="#9fb2a8" stop-opacity="0.1"/>
+      <stop offset="1" stop-color="#9fb2a8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="bevel" filterUnits="userSpaceOnUse" x="-40" y="-30" width="180" height="190" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="0.9" result="height"/>
+      <feSpecularLighting in="height" surfaceScale="2.4" specularConstant="0.85" specularExponent="16" lighting-color="#ffffff" result="spec">
+        <fePointLight x="50" y="36" z="70"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
+      <feOffset in="SourceAlpha" dx="-1" dy="-1.1" result="up"/>
+      <feComposite in="SourceAlpha" in2="up" operator="out" result="edge"/>
+      <feGaussianBlur in="edge" stdDeviation="0.5" result="edgeSoft"/>
+      <feFlood flood-color="#000000" flood-opacity="0.38"/>
+      <feComposite in2="edgeSoft" operator="in"/>
+      <feComposite in2="SourceAlpha" operator="in" result="shade"/>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.1" result="sBlur"/>
+      <feOffset in="sBlur" dx="0.9" dy="1.5" result="sOff"/>
+      <feFlood flood-color="#000000" flood-opacity="0.28"/>
+      <feComposite in2="sOff" operator="in" result="drop"/>
+      <feMerge>
+        <feMergeNode in="drop"/>
+        <feMergeNode in="SourceGraphic"/>
+        <feMergeNode in="shade"/>
+        <feMergeNode in="specIn"/>
+      </feMerge>
+    </filter>
+    <clipPath id="ball"><circle cx="50" cy="50" r="46"/></clipPath>
+  </defs>
+  <circle cx="50" cy="50" r="46" fill="#f6f8f6"/>
+  <circle cx="50" cy="50" r="46" fill="url(#shell)"/>
+  <ellipse cx="50" cy="92" rx="36" ry="20" fill="url(#pool)" clip-path="url(#ball)" opacity="0.3"/>
+  <ellipse cx="50" cy="24" rx="16" ry="8" fill="url(#spec)" clip-path="url(#ball)"/>
+  <g filter="url(#bevel)">
+    <path d="M50.00 12.16L53.30 12.31L56.57 12.74L59.79 13.45L62.94 14.44L65.99 15.71L68.92 17.23L71.70 19.00L74.32 21.01L76.76 23.24L78.99 25.68L81.00 28.30L82.77 31.08L84.29 34.01L85.56 37.06L86.55 40.21L87.26 43.43L87.69 46.70L87.84 50.00L87.69 53.30L87.26 56.57L86.55 59.79L85.56 62.94L84.29 65.99L82.77 68.92L81.00 71.70L78.99 74.32L76.76 76.76L74.32 78.99L71.70 81.00L68.92 82.77L65.99 84.29L62.94 85.56L59.79 86.55L56.57 87.26L53.30 87.69L50.00 87.84L46.70 87.69L43.43 87.26L40.21 86.55L37.06 85.56L34.01 84.29L31.08 82.77L28.30 81.00L25.68 78.99L23.24 76.76L21.01 74.32L19.00 71.70L17.23 68.92L15.71 65.99L14.44 62.94L13.45 59.79L12.74 56.57L12.31 53.30L12.16 50.00L12.31 46.70L12.74 43.43L13.45 40.21L14.44 37.06L15.71 34.01L17.23 31.08L19.00 28.30L21.01 25.68L23.24 23.24L25.68 21.01L28.30 19.00L31.08 17.23L34.01 15.71L37.06 14.44L40.21 13.45L43.43 12.74L46.70 12.31Z" fill="none" stroke="url(#ring)" stroke-width="2.040" stroke-linecap="round"/>
+    <path d="M50.00 22.18L50.00 26.63" fill="none" stroke="#1f2925" stroke-width="3.153" stroke-linecap="round"/>
+    <path d="M16.98 53.90L22.18 53.90M77.82 53.90L83.02 53.90" fill="none" stroke="#1f2925" stroke-width="2.411" stroke-linecap="round"/>
+  </g>
+  <g filter="url(#bevel)">
+    <path d="M35.35 41.65L35.52 40.56L36.02 39.58L36.80 38.80L37.78 38.30L38.87 38.13L39.96 38.30L40.94 38.80L41.72 39.58L42.22 40.56L42.40 41.65L42.40 44.99L42.22 46.08L41.72 47.06L40.94 47.84L39.96 48.34L38.87 48.52L37.78 48.34L36.80 47.84L36.02 47.06L35.52 46.08L35.35 44.99ZM57.60 41.65L57.78 40.56L58.28 39.58L59.06 38.80L60.04 38.30L61.13 38.13L62.22 38.30L63.20 38.80L63.98 39.58L64.48 40.56L64.65 41.65L64.65 44.99L64.48 46.08L63.98 47.06L63.20 47.84L62.22 48.34L61.13 48.52L60.04 48.34L59.06 47.84L58.28 47.06L57.78 46.08L57.60 44.99Z" fill="#1f2925"/>
+    <path d="M28.11 53.52L27.88 53.80L27.52 54.19L27.12 54.65L26.73 55.15L26.42 55.65L26.26 56.12L26.25 56.59L26.34 57.08L26.51 57.58L26.75 58.07L27.04 58.51L27.37 58.90L27.75 59.25L28.20 59.56L28.69 59.84L29.23 60.08L29.78 60.26L30.34 60.39L30.91 60.45L31.52 60.47L32.15 60.43L32.78 60.35L33.42 60.21L34.05 60.02L34.67 59.75L35.28 59.40L35.90 59.01L36.52 58.59L37.14 58.17L37.76 57.79L38.38 57.41L38.99 57.01L39.61 56.61L40.23 56.24L40.85 55.95L41.47 55.75L42.09 55.65L42.73 55.62L43.37 55.66L44.00 55.76L44.60 55.91L45.18 56.12L45.73 56.41L46.26 56.79L46.78 57.23L47.27 57.69L47.72 58.14L48.15 58.53L48.52 58.92L48.85 59.33L49.14 59.73L49.42 60.06L49.70 60.30L50.00 60.39L50.30 60.30L50.58 60.06L50.86 59.73L51.15 59.33L51.48 58.92L51.85 58.53L52.28 58.14L52.73 57.69L53.22 57.23L53.74 56.79L54.27 56.41L54.82 56.12L55.40 55.91L56.00 55.76L56.63 55.66L57.27 55.62L57.91 55.65L58.53 55.75L59.15 55.95L59.77 56.24L60.39 56.61L61.01 57.01L61.62 57.41L62.24 57.79L62.86 58.17L63.48 58.59L64.10 59.01L64.72 59.40L65.33 59.75L65.95 60.02L66.58 60.21L67.22 60.35L67.85 60.43L68.48 60.47L69.09 60.45L69.66 60.39L70.22 60.26L70.77 60.08L71.31 59.84L71.80 59.56L72.25 59.25L72.63 58.90L72.96 58.51L73.25 58.07L73.49 57.58L73.66 57.08L73.75 56.59L73.74 56.12L73.58 55.65L73.27 55.15L72.88 54.65L72.48 54.19L72.12 53.80L71.89 53.52" fill="none" stroke="#1f2925" stroke-width="3.895" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M52.41 62.80L52.23 63.72L51.71 64.50L50.92 65.03L50.00 65.21L49.08 65.03L48.29 64.50L47.77 63.72L47.59 62.80L47.77 61.88L48.29 61.09L49.08 60.57L50.00 60.39L50.92 60.57L51.71 61.09L52.23 61.88Z" fill="#1f2925"/>
+    <path d="M41.47 73.56L48.52 76.90L48.52 79.86L41.47 83.20L40.35 82.27L40.35 74.48ZM58.53 73.56L51.48 76.90L51.48 79.86L58.53 83.20L59.65 82.27L59.65 74.48ZM47.96 78.01L48.23 76.99L48.98 76.24L50.00 75.97L51.02 76.24L51.77 76.99L52.04 78.01L52.04 78.75L51.77 79.77L51.02 80.52L50.00 80.79L48.98 80.52L48.23 79.77L47.96 78.75Z" fill="#1f2925" stroke-linejoin="round"/>
+  </g>
+  <path d="M38.31 40.35L38.19 41.10L37.85 41.64L37.39 41.84L36.92 41.64L36.58 41.10L36.46 40.35L36.58 39.61L36.92 39.07L37.39 38.87L37.85 39.07L38.19 39.61ZM60.57 40.35L60.45 41.10L60.11 41.64L59.65 41.84L59.18 41.64L58.84 41.10L58.72 40.35L58.84 39.61L59.18 39.07L59.65 38.87L60.11 39.07L60.45 39.61Z" fill="#ffffff" fill-opacity="0.9"/>
+</svg>
