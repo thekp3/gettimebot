@@ -194,7 +194,27 @@ export async function assertComputerHomeWritable(
     await assertWritableLinux(root, uid, gid);
     return;
   }
+  if (process.platform === "win32") {
+    // Windows files have no POSIX owner or mode, and Docker Desktop bind mounts are writable by
+    // the container user, so only the shape of the home is checked.
+    await assertHomeDirectory(root);
+    return;
+  }
   await assertWritableEntry(root, root, uid, gid, true);
+}
+
+async function assertHomeDirectory(root: string): Promise<void> {
+  let stat: Stats;
+  try {
+    stat = await lstat(root);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      throw new Error(`computer home ${root} does not exist`);
+    }
+    throw error;
+  }
+  if (stat.isSymbolicLink()) throw new Error(`computer home ${root} must not be a symbolic link`);
+  if (!stat.isDirectory()) throw new Error(`computer home ${root} must be a directory`);
 }
 
 /** Exported for regression coverage of the moved-directory escape check. */
